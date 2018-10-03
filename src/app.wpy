@@ -1,0 +1,74 @@
+<style lang="less">
+@import 'style/weui.less';
+</style>
+
+<script>
+import wepy from 'wepy';
+import config from './config'
+import 'wepy-async-function';
+
+
+
+export default class extends wepy.app {
+  config = {
+    pages: ['pages/home/index', 
+            'pages/me/index',
+            'pages/expert/index'
+          ],
+    window: {
+      backgroundTextStyle: '#00a0e8',
+      navigationBarBackgroundColor: '#00a0e8',
+      navigationBarTitleText: 'WeChat',
+      navigationBarTextStyle: 'black',
+      enablePullDownRefresh: true,
+       backgroundColor: '#EFEFEF'
+    },
+    tabBar: {
+      color: '#999999',
+      selectedColor: '00a0e8',
+      backgroundColor: 'ffffff',
+      list: [
+        {
+          pagePath: 'pages/home/index',
+          text: '首页',
+          iconPath: 'images/tab_home.png',
+          selectedIconPath: 'images/tab_home_press.png'
+        },
+        {
+          pagePath: 'pages/expert/index',
+          text: '专家',
+          iconPath: 'images/tab_expert.png',
+          selectedIconPath: 'images/tab_expert_press.png'          
+        },
+        {
+          pagePath: 'pages/me/index',
+          text: '我的',
+          iconPath: 'images/tab_my.9.png',
+          selectedIconPath: 'images/tab_my_press.9.png'          
+        }
+      ]
+    }
+  };
+
+  globalData = {
+    userInfo: null,
+    apiUrl: config.envInfo.apiUrl,
+    apiAppId: config.envInfo.apiAppId,
+    apiSecret:config.envInfo.apiSecret,
+    apiAuthorization: '',
+  };
+  onLaunch(){
+    const apiAuthorization = wepy.getStorageSync('apiAuthorization')
+    if(apiAuthorization){
+      wepy.$instance.globalData.apiAuthorization = apiAuthorization;
+    }
+  }
+
+  constructor() {
+    super();
+    this.use('requestfix');
+    this.use('promisify');
+  }
+
+}
+</script>

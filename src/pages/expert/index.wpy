@@ -1,0 +1,17 @@
+<template>
+    
+</template>
+
+<script>
+import wepy from 'wepy'
+    export default class Expert extends wepy.page{
+        config = {
+            navigationBarTitleText: '专家'
+        }
+    }
+</script>
+
+<style lang="less" >
+
+</style>
+

@@ -1,0 +1,111 @@
+<style lang="less">
+  @import '../../style/common.less';
+  .slide-image{
+    width:100%;
+    height:300rpx;
+    
+  }
+  .tab-content{
+    width:100%;
+    height: 150rpx;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+    .tab-item{
+      font-size: 22rpx;
+      text-align: center;
+      image{
+        width:77rpx;
+        height: 70rpx;
+      }
+      text{
+        display: block;
+        margin-top: 20rpx;
+      }
+    }
+  }
+  .ziben{
+    .title{
+      background: @background;
+      display: block;
+      height: 60rpx;
+      line-height: 60rpx;
+      font-size:24rpx;
+      padding-left: 22rpx;
+    }
+  }
+</style>
+<template>
+  <view class="container">
+      <swiper indicator-dots="{{true}}" autoplay="{{true}}" circular="{{true}}" duration="{{duration}}">
+          <block wx:for="{{slideShows}}" wx:key='{{index}}'>
+            <swiper-item>
+              <navigator >
+                <image src="{{item.imageWxAppOss}}" class="slide-image"/>
+              </navigator>
+            </swiper-item>
+          </block>
+      </swiper>
+      <view class="tab-content">
+        <view class="tab-item">
+          <image src="../../images/home/home_all@2x.png"/>
+          <text>所有课程</text>
+        </view>
+        <view class="tab-item">
+          <image src="../../images/home/hot@2x.png" />
+          <text>热门推荐</text>
+        </view>
+        <view class="tab-item">
+          <image src="../../images/home/discount@2x.png" />
+          <text>限时特惠</text>
+        </view>
+        <view class="tab-item">
+          <image src="../../images/home/shcool@2x.png" />
+          <text>资本学院</text>
+        </view>
+      </view>
+      <freeLessonFree title="免费课程" :courseList.sync="courseDiscountFree"></freeLessonFree>
+      <freeLessonHot title="热门课程" :courseList.sync="courseHotRecommend"></freeLessonHot>
+      <view class="ziben">
+        <text class="title">资本学院</text>
+      </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy';
+import homeApi from '../../api/home'
+import freeLesson from  '../../components/freeLesson'
+
+export default class Index extends wepy.page {
+  config = {
+    navigationBarTitleText: '首页',
+    navigationBarTextStyle: 'white'
+  };
+  data = {
+    slideShows: [],
+    duration: 1000,
+    courseDiscountFree: null,
+    courseHotRecommend: null
+  }
+  components = {
+    freeLessonFree: freeLesson,
+    freeLessonHot: freeLesson
+  }
+  computed = {}
+  method = {}
+  events = {}
+  async getHomeData(){
+    let homeData = await homeApi.get();
+    this.slideShows = homeData.slideShows;
+    this.courseDiscountFree = homeData.courseDiscountFree;
+    this.courseHotRecommend = homeData.courseHotRecommend;
+    console.log(this.courseHotRecommend)
+    this.$apply();
+  }
+  onLoad(){
+    this.getHomeData()
+  }
+  
+}
+</script>
