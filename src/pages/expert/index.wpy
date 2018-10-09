@@ -1,17 +1,57 @@
 <template>
-    
+    <view class="expert-container">
+        <scroll-view scroll-y="{{true}}" style="height: 100vh" enable-back-to-top="{{true}}" bindscrolltolower="lower">
+                <repeat for="{{expertList}}" key="index" item="item">
+                    <expertItem :item="item"></expertItem>
+                </repeat> 
+        </scroll-view>
+    </view>
 </template>
 
 <script>
 import wepy from 'wepy'
+import expertItem from '../../components/expertItem'
+import expertApi from '../../api/expert'
     export default class Expert extends wepy.page{
+        data = {
+            expertList: [],
+            nextPage: 1,
+            hasNextPage:true,
+        }
         config = {
-            navigationBarTitleText: '专家'
+            navigationBarTitleText: '专家',
+            navigationBarTextStyle: 'white',
+            enablePullDownRefresh: false
+        }
+        components = {
+            expertItem
+        }
+        methods = {
+            lower(){
+                this.getExpertList();
+            }
+        }
+        async getExpertList(){
+            let param = {
+                page: this.nextPage
+            };
+            let res = await expertApi.get(param);
+            if(this.hasNextPage){
+                this.expertList = this.expertList.concat(res.items)
+            }
+            this.nextPage = res.nextPage;
+            this.hasNextPage = res.hasNextPage;
+            this.$apply();
+        }
+        onLoad(){
+            this.getExpertList()
         }
     }
 </script>
 
 <style lang="less" >
-
+.expert-container{
+    padding: 20rpx;
+}
 </style>
 

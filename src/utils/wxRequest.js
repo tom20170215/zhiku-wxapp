@@ -1,15 +1,17 @@
 import wepy from 'wepy'
 import md5 from './md5'
 import util from './util'
+import tips from './tip'
 
 const wxRequest = async (url, params = {}, header = {}, method = "GET") => {
+  tips.loading();
   var data = params || {};
   data.timestamp = util.getCurrentTime();
   data.client_id = wepy.$instance.globalData.apiAppId;
   data.signature = hashParams(data);
   header = Object.assign({
     "Content-Type": "application/x-www-form-urlencoded",
-    'Accept': 'application/json',
+    'Accept': 'application/json'
   }, header);
   let res = await wepy.request({
     url: url,
@@ -17,8 +19,12 @@ const wxRequest = async (url, params = {}, header = {}, method = "GET") => {
     header: header,
     data: data
   });
+  tips.loaded();
   return res;
 };
+
+
+
 
 /**
  *生成MD5值
@@ -34,10 +40,10 @@ function hashParams(param) {
       return;
     }
     if(Array.isArray(data[key])){
-      data[key].foreach(subKey => {
+      data[key].forEach(subKey => {
         str += data[key][subKey]
       })
-    }else if(typeof(data[key] === 'Object')){
+    }else if(typeof(data[key]) === 'Object'){
       for(var i in data[key]){
         str += data[key][i]
       }

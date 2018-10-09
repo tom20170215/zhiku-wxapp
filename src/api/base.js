@@ -14,6 +14,9 @@ export default class base {
     } else {
       url = this.baseUrl + this.url
     }
+    if(wepy.$instance.globalData.apiAuthorization&&(wepy.$instance.globalData.expires_in-new Date().getTime()>=0)){
+      header.Authorization = 'bearer ' + wepy.$instance.globalData.apiAuthorization;
+    }
     return wxRequest(url, param, header, method)
   }
 }

@@ -6,6 +6,7 @@
 import wepy from 'wepy';
 import config from './config'
 import 'wepy-async-function';
+import PubSub from  './utils/pubsub'
 
 
 
@@ -13,7 +14,8 @@ export default class extends wepy.app {
   config = {
     pages: ['pages/home/index', 
             'pages/me/index',
-            'pages/expert/index'
+            'pages/expert/index',
+            'pages/home/courseList'
           ],
     window: {
       backgroundTextStyle: '#00a0e8',
@@ -56,6 +58,8 @@ export default class extends wepy.app {
     apiAppId: config.envInfo.apiAppId,
     apiSecret:config.envInfo.apiSecret,
     apiAuthorization: '',
+    expires_in:0,
+    pubSub:new PubSub()
   };
   onLaunch(){
     const apiAuthorization = wepy.getStorageSync('apiAuthorization')

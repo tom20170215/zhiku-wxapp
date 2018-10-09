@@ -1,0 +1,100 @@
+<style lang="less">
+.courseList-container{
+    .category{
+        display: flex;
+        justify-content: center;
+        background: #f5f5f5;
+    &>view{
+        text-align: left;
+        flex: 1;
+        font-size: 24rpx;
+        margin-left: 20rpx;
+        view{
+            height: 70rpx;
+            line-height: 70rpx;
+            text-align: left;
+            margin-left: 20rpx;
+            image{
+                width: 40rpx;
+                height: 40rpx;
+                vertical-align: middle;
+                }
+            }
+        }
+    }
+
+}
+</style>
+
+<template>
+    <view class="courseList-container">
+        <view class="category" wx:if="{{title === '全部课程'}}">
+            <view class="master-menu">
+                <view bindtap="toggleCategory">
+                    全部<image src="../../images/down.png" />
+                </view>
+                <view wx:for="{{masterMenuList}}" wx:key="{{index}}" wx:if="{{isShow}}">
+                    {{item.name}}
+                </view>
+            </view>
+        </view>
+        <scroll-view scroll-y="{{true}}" bindscrolltolower="lower" enable-back-to-top="{{true}}">
+            <view class="lesson-list">
+                <block wx:for="{{courseList}}" wx:key="{{index}}">
+                    <navigator url="">
+                        <view class="item">
+                            <image src="" />
+                            <view class="desc">
+                                <text></text>
+                                <text></text>
+                                <text></text>
+                            </view>
+                        </view>
+                    </navigator>
+                </block>
+            </view>
+        </scroll-view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import courseApi from '../../api/course'
+    export default class courseList extends wepy.page{
+        config = {
+            navigationBarTitleText: '所有课程',
+            navigationBarTextStyle: 'white'
+        }
+        data = {
+            title: "",
+            masterMenuList: null,
+            courseList: null,
+            nextPage: 1,
+            isShow: false
+        }
+        methods = {
+            toggleCategory(){
+                this.isShow = !this.isShow;
+            }
+        }
+        async getCourseCategory(){
+            let res = await courseApi.getCourseCategory();
+            this.masterMenuList = res;
+            this.$apply();
+        }
+        async getResourceData(title,url){
+            let param = {
+                hot_recommend: 1,
+                page: this.nextPage                
+            }
+            let res = await courseApi.get(param, url);
+            console.log(res)
+        }
+        onLoad(option){
+            this.url = option.resourse;
+            this.title = option.title;
+            this.getCourseCategory();
+            this.getResourceData(option.title,option.resourse)
+        }
+    }
+</script>

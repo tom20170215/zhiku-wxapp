@@ -33,6 +33,35 @@
       font-size:24rpx;
       padding-left: 22rpx;
     }
+  .ziben-content{
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20rpx;
+    .ziben-item{
+      box-sizing: border-box;
+      width: 50%;
+      height: 160rpx;
+      line-height: 160rpx;
+      text-align:center;
+      font-size: 26rpx;
+      color: #999;
+        image{
+          width: 70%;
+          height: 70%;
+          vertical-align: middle;
+    }
+    &:first-child{
+      border-right: 1px solid @college-border;
+      border-bottom: 1px solid @college-border;
+    }
+    &:nth-child(2){
+      border-bottom: 1px solid @college-border;
+    }
+    &:nth-child(3){
+      border-right: 1px solid @college-border;
+    }
+    }
+  }
   }
 </style>
 <template>
@@ -47,19 +76,19 @@
           </block>
       </swiper>
       <view class="tab-content">
-        <view class="tab-item">
+        <view class="tab-item" bindtap="goLessionList"  data-resource="{{'courses'}}" data-title="全部课程">
           <image src="../../images/home/home_all@2x.png"/>
           <text>所有课程</text>
         </view>
-        <view class="tab-item">
+        <view class="tab-item" bindtap="goLessionList" data-resource="{{'courses'}}" data-title="热门推荐">
           <image src="../../images/home/hot@2x.png" />
           <text>热门推荐</text>
         </view>
-        <view class="tab-item">
+        <view class="tab-item" bindtap="goLessionList" data-resource="{{'courses'}}" data-title="限时特惠">
           <image src="../../images/home/discount@2x.png" />
           <text>限时特惠</text>
         </view>
-        <view class="tab-item">
+        <view class="tab-item" bindtap="getMoreCourse">
           <image src="../../images/home/shcool@2x.png" />
           <text>资本学院</text>
         </view>
@@ -68,6 +97,16 @@
       <freeLessonHot title="热门课程" :courseList.sync="courseHotRecommend"></freeLessonHot>
       <view class="ziben">
         <text class="title">资本学院</text>
+        <view class="ziben-content">
+          <block wx:for="{{college}}" wx:key="index">
+            <view class="ziben-item">
+              <image src="{{item.picOss}}" />
+            </view>
+          </block>
+          <view class="ziben-item">
+            <text>更多专题班</text>
+          </view>
+        </view>
       </view>
   </view>
 </template>
@@ -86,21 +125,33 @@ export default class Index extends wepy.page {
     slideShows: [],
     duration: 1000,
     courseDiscountFree: null,
-    courseHotRecommend: null
+    courseHotRecommend: null,
+    college: null
   }
   components = {
     freeLessonFree: freeLesson,
     freeLessonHot: freeLesson
   }
   computed = {}
-  method = {}
+  methods = {
+    goLessionList(e){
+      this.$navigate({url:"./courseList?resourse=" + e.currentTarget.dataset.resource + "&title=" + e.currentTarget.dataset.title})
+    },
+    onShareAppMessage(){
+      return {
+        title: '首页',
+        path: '/pages/home/index'
+      }
+    }
+  }
   events = {}
+
   async getHomeData(){
     let homeData = await homeApi.get();
     this.slideShows = homeData.slideShows;
     this.courseDiscountFree = homeData.courseDiscountFree;
     this.courseHotRecommend = homeData.courseHotRecommend;
-    console.log(this.courseHotRecommend)
+    this.college = homeData.college;
     this.$apply();
   }
   onLoad(){

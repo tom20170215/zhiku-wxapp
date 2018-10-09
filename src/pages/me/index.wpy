@@ -1,17 +1,153 @@
 <template>
-    
+    <view class="me-container">
+        <view class="login-info">
+            <image src="{{user?user.data.wechat.headimgurl:'../../images/me/me_bg_login@2x.png'}}" class="photo"/>
+            <view class="login-status">
+                点击登录    
+            </view>
+            <image src="../../images/svg/right-arrow.svg" wx:if="{{!isLogin}}" class="arrow-right"/>
+        </view>
+        <view class="my-correlation">
+            <view class="my-item">
+                <image src="../../images/me/me_myconsult.png" />
+                <text>我的咨询</text>
+            </view>
+            <view class="my-item">
+                <image src="../../images/me/me_kecheng@2x.png" />
+                <text>我的课程</text>
+            </view>
+            <view class="my-item">
+                <image src="../../images/me/me_huodong@2x.png" />
+                <text>我的活动</text>
+            </view>                    
+        </view>
+        <view class="list-group">
+            <view class="list-item">
+                <image src="../../images/me/order.png" />
+                <text>我的订单</text>
+                <image src="../../images/svg/right-arrow.svg" class="right-arrow"/>
+            </view>
+            <view class="list-item">
+                <image src="../../images/me/comment.png" />
+                <text>我的评论</text>
+                <image src="../../images/svg/right-arrow.svg"  class="right-arrow"/>                
+            </view>
+        </view>
+        <view class="set">
+            <image src="../../images/me/moreset.png" class="icon"/>
+            <text>更多设置</text>
+            <image src="../../images/svg/right-arrow.svg" class="right-arrow"/>
+        </view>
+    </view>
 </template>
 
 <script>
 import wepy from 'wepy'
     export default class Me extends wepy.page{
         config = {
-            navigationBarTitleText: '我的'
+            navigationBarTitleText: '我的',
+            navigationBarTextStyle: 'white',
+            enablePullDownRefresh: false
+        }
+        data = {
+            user: wx.getStorageSync('user'),
+            isLogin: false
         }
     }
 </script>
 
 <style lang="less">
-
+.me-container{
+    background: #f2f2f2;
+    height: 100%;
+    .login-info{
+        height: 160rpx;
+        line-height: 160rpx;
+        border-bottom: 1px solid #eee;
+        background: #fff;
+        .photo{
+            width: 100rpx;
+            height:100rpx;
+            margin: 30rpx 20rpx 20rpx 50rpx;
+            float:left;
+            border-radius: 10rpx;
+        }
+        .login-status{
+            float: left;
+            font-size: 28rpx;
+            margin-left: 25rpx;
+        }
+        .arrow-right{
+            float: right;
+            width: 50rpx;
+            height: 50rpx;
+            margin-top: 55rpx;
+        }
+    }
+    .my-correlation{
+        display: flex;
+        justify-content: space-around;
+        height: 180rpx;
+        background: #fff;
+        .my-item{
+            width: 33%;
+            text-align: center;
+            margin-top: 20rpx;
+            image{
+                width: 70rpx;
+                height: 70rpx;
+            }
+            text{
+                display: block;
+                font-size: 26rpx;
+            }
+        }
+    }
+    .list-group{
+        margin: 25rpx 0;
+        .list-item{
+            height: 80rpx;
+            line-height: 80rpx;
+            padding-left:20rpx;
+            margin: 5rpx 0;
+            background: #fff;
+            image{
+                width: 40rpx;
+                height: 40rpx;
+                margin-top:22rpx;
+                float:left;
+            }
+            text{
+                font-size:26rpx;
+                margin-left: 30rpx;
+            }
+            .right-arrow{
+                float: right;
+            }
+        }
+    }
+    .set{
+        margin: 25rpx 0;
+        background: #fff;
+        height: 80rpx;
+        line-height: 80rpx;
+        font-size: 26rpx;
+        padding-left: 20rpx;
+        image{
+            width: 40rpx;
+            height: 40rpx;
+            display: inline;
+            float: left;
+            margin-top: 22rpx;
+        }
+        text{
+            font-size:26rpx;
+            margin-left: 30rpx;
+        }        
+        .right-arrow{
+            float: right;
+        }
+    }
+}
 </style>
 

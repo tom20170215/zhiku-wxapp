@@ -1,0 +1,61 @@
+<template>
+    <view class="expert-item">
+        <image src="{{item.activityCoverOss}}" />
+        <view class="info">
+            <text class="title">{{item.title}}</text>
+            <text class="author">{{item.lecturer.lecturerName}}</text>
+            <view class="price">
+                <text>{{item.price?("￥"+item.price):"免费"}}</text>
+                <text>{{"￥"+item.originalPrice}}</text>
+                <text>仅剩{{item.limitPeople-item.regPeople}}个名额</text>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+    export default class expertItem extends wepy.component{
+        data = {}
+        props = {
+            item: Object
+        }
+    }
+</script>
+
+<style lang="less">
+.expert-item{
+    margin-bottom: 20rpx;
+    image{
+        width: 100%;
+        border-radius: 15rpx;
+    }
+    .info{
+        display: flex;
+        flex-direction: column;
+        .title{
+            font-size: 26rpx;
+            color: #2c7bff;
+        }
+        .author{
+            font-size: 22rpx;
+        }
+        .price{
+            font-size: 24rpx;
+            text{
+            &:first-child{
+                color: #e66924;
+                margin-right:15rpx;
+            }
+            &:nth-child(2){
+                text-decoration: line-through;
+            }
+            &:nth-child(3){
+                float: right;
+            }
+            }
+
+        }
+    }
+}
+</style>
